@@ -104,7 +104,7 @@ class cosmology_base:
 
 class cosmology(cosmology_base):
     """
-    Constructs a flat Lambda-CDM cosmology containing FRB's (f), galaxies (g) and electrons (e).
+    Constructs a flat Lambda-CDM cosmology containing FRBs (f), galaxies (g) and electrons (e).
 
     Implicit units:
 
@@ -135,9 +135,9 @@ class cosmology(cosmology_base):
         self.n2d_galaxy: (1-d array) 2-d number counts between self.zbin_delim_galaxy delimiters. (*)
         self.dn2d_galaxy: (1-d array) errors in self.n2d_galaxy. (*)
         self.m_g: (function) interpolator of redshift-dependant min halo mass for hosting galaxies.
-        self.dndz_frb: (list) interpolated differential number of FRB's per unit steradian in self.frb_par models.
+        self.dndz_frb: (list) interpolated differential number of FRBs per unit steradian in self.frb_par models.
         self.eta: (list) function (z) for normalizing FRB counts in self.frb_par models.
-        self.psg: (list) probability for single galaxies to host FRB's.
+        self.psg: (list) probability for single galaxies to host FRBs.
         self.kk: (1-d array) log-spaced spatial wavenumbers.
         self.ll: (1-d array) log-spaced angular wavenumbers over which radial weight functions are interpolated.
         self.interp_ngg_3d: (lambda) interpolated 3-d comoving number density of (g,g) pairs in the same halo (z).
@@ -158,8 +158,8 @@ class cosmology(cosmology_base):
         self.w_x: (method) radial weight function.
         cosmology.n_x: (static method) wraps a callable HOD f(z,m,xmin,xmax) given the constraint (xmin,xmax).
         cosmology.dm_h: (static method) random host DM from a log-normal distribution.
-        cosmology.frb_dndz: (static method) redshift distribution of FRB's.
-        self._frb_dndz_interp: (helper method) interpolated normalized redshift distribution of FRB's.
+        cosmology.frb_dndz: (static method) redshift distribution of FRBs.
+        self._frb_dndz_interp: (helper method) interpolated normalized redshift distribution of FRBs.
         self._vol_s: (helper method) comoving volume in a redshift shell.
         self._dvoz: (helper method) returns the differential volume factor dV(z)/dOmega/dz.
         self._chi_to_z: (helper method) interpolates line-of-sight comoving distance over a range of redshifts.
@@ -788,7 +788,7 @@ class cosmology(cosmology_base):
     @staticmethod
     def frb_dndz(z, p, alpha):
         """
-        This static method models the differential number density of FRB's as a function of redshift:
+        This static method models the differential number density of FRBs as a function of redshift:
 
         dn/dz = z^p * exp(-alpha * z), where dn/dz is not normalized.
 
@@ -817,11 +817,11 @@ class cosmology(cosmology_base):
     def _frb_dndz_interp(self, n_frb, p, alpha, zmin, zmax, z_log, interp_nstep=10000):
         """
         This helper method returns the interpolated differential number density
-        of FRB's, normalized as a function of redshift.
+        of FRBs, normalized as a function of redshift.
 
         Args:
 
-            n_frb: (float) 2-d angular number density of FRB's on the sky. (per unit steradian)
+            n_frb: (float) 2-d angular number density of FRBs on the sky. (per unit steradian)
             p: (float) an FRB model parameter.
             alpha: (float) an FRB model parameter.
             zmin: (float) min redshift bound.
@@ -831,7 +831,7 @@ class cosmology(cosmology_base):
 
         Returns:
 
-            function (z), number of FRB's per unit redshift per unit steradian.
+            function (z), number of FRBs per unit redshift per unit steradian.
         """
 
         assert isinstance(n_frb, float) and (n_frb >= 0.0)
@@ -855,7 +855,7 @@ class cosmology(cosmology_base):
 
         def ret(x, cutoff=True):
             """
-            Returns the differential number density of FRB's at a given redshift 'x'.
+            Returns the differential number density of FRBs at a given redshift 'x'.
             If the 'cutoff' (bool) argument is True, then the function always returns
             zero for input redshifts greater than 'self.config.fn_zmax'.
             """
@@ -1150,7 +1150,7 @@ class cosmology(cosmology_base):
 
     def __psg(self):
         """
-        This special method computes the probability for single galaxies to host FRB's.
+        This special method computes the probability for single galaxies to host FRBs.
 
         Returns:
 

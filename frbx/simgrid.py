@@ -78,7 +78,7 @@ class simgrid:
             nl: (int) if not None, it specifies the number of l's for downsampling power spectra.
             up: (int) odd multiplicative factor for upsampling, hence increasing the
                 resolution of the grid prior to radial binning, along the two axes.
-            save_ff: (bool) whether to compute and save the angular cross-power (between DM bins) for FRB's.
+            save_ff: (bool) whether to compute and save the angular cross-power (between DM bins) for FRBs.
             save_gg: (bool) whether to compute and save the angular auto-power (in redshift shells) for galaxies.
             verbose: (bool) enables prints for debugging catalogs.
         """

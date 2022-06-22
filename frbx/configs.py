@@ -341,13 +341,13 @@ class frb_configs:
 
         assert isinstance(index, list) or (index is None)
 
-        ret = [[1000, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],           # High-z FRB's x SDSS
-               [1000, 2.0, 3.5, 4.0, 1.0, 1.0, False, 1.0e9],           # High-z FRB's x SDSS (incl. single-galaxy term)
-               [1000, 2.0, 120.0, 6.7755, 0.6316, 0.0, True, 1.0e9],    # Low-z FRB's x SDSS (requires log-spaced z)
-               [10000, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],          # High-z FRB's x DESI (10x fid N_frb)
-               [323, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRB's x 2MPZ_FP
-               [310, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRB's x WISExSCOS_SVM
-               [183, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9]]            # CHIMEFRB Catalog 1 FRB's x DESI-BGS/LRG/ELG
+        ret = [[1000, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],           # High-z FRBs x SDSS
+               [1000, 2.0, 3.5, 4.0, 1.0, 1.0, False, 1.0e9],           # High-z FRBs x SDSS (incl. single-galaxy term)
+               [1000, 2.0, 120.0, 6.7755, 0.6316, 0.0, True, 1.0e9],    # Low-z FRBs x SDSS (requires log-spaced z)
+               [10000, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],          # High-z FRBs x DESI (10x fid N_frb)
+               [323, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRBs x 2MPZ_FP
+               [310, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRBs x WISExSCOS_SVM
+               [183, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9]]            # CHIMEFRB Catalog 1 FRBs x DESI-BGS/LRG/ELG
 
         if index is None:
             return ret

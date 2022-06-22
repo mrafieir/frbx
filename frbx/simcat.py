@@ -13,7 +13,7 @@ from frbx.configs import eps
 
 class simcat:
     """
-    This class can be used to generate a series of pseudo 3-d simulations of halos, galaxies, and FRB's.
+    This class can be used to generate a series of pseudo 3-d simulations of halos, galaxies, and FRBs.
 
     Implicit units:
 
@@ -28,21 +28,21 @@ class simcat:
         self.pkl_dir: (str) path to an existing directory for pickling computationally expensive objects.
         self.debug: (bool) enables an interactive mode for debugging.
         self.config: (obj) points to self.ftc.config, which is an instance of fx.configs.
-        self.m_f: (float) min halo mass for hosting FRB's.  FIXME: See below.
+        self.m_f: (float) min halo mass for hosting FRBs.  FIXME: See below.
         self.r_nfw_interp: (dict) interpolator for computing radial coordinates in the NFW halo profile.
         self.zmin: (float) min redshift for simulating sources.
         self.zmax: (float) max redshift for simulating sources.
         self.zz: (list) edges of redshift shells.
         self.hmb: (dict) halo-related stats containing mass bins, expected counts, and halo_mass_function objects.
         simcat.set_rng: (static method) sets the initial RNG seed.
-        self.simulate: (method) generates and writes random catalogs of galaxies and FRB's.
+        self.simulate: (method) generates and writes random catalogs of galaxies and FRBs.
         self._extract_random_intrahalo_source: (helper method) selects random intrahalo sources from a saved catalog.
         simcat.unique_random_halo_index: (static method) generates unique random halo indices
                                          for binned intrahalo sources.
         self._generate_halo: (helper method) generates randomly distributed halos in a redshift shell.
         self._generate_halo_catalog: (helper method) generates a catalog of randomly distributed halos in a
                                      redshift shell.
-        self._generate_intrahalo_catalog: (helper method) generates a catalog of galaxies or FRB's in a redshift shell.
+        self._generate_intrahalo_catalog: (helper method) generates a catalog of galaxies or FRBs in a redshift shell.
         self._mpc_to_angle: (helper method) converts transverse comoving distance (in Mpc/h) to
                             an angle in self.config.sim.unit.
         self._generate_nfw: (helper method) generates random 3-d positions in the NFW halo profile.
@@ -103,7 +103,7 @@ class simcat:
 
     def simulate(self, o_path, nsim, seed=None):
         """
-        This method generates catalogs of galaxies and FRB's.
+        This method generates catalogs of galaxies and FRBs.
 
         At its core, there is an outer loop of Monte Carlo simulations containing an inner loop over independent
         redshift shells with vectorized halo mass bins.
@@ -122,7 +122,7 @@ class simcat:
                 2.1. A catalog of halos is created for mass bins with m >= Mg, which can host galaxies.
                 2.2. Using the existing halos with m >= Mg, a galaxy catalog is generated for the shell.
 
-            3. Using all mass bins m >= Mf, we assign FRB's to halo indices.  If an index exists already (i.e. halos
+            3. Using all mass bins m >= Mf, we assign FRBs to halo indices.  If an index exists already (i.e. halos
                with m >= Mg), then we use the existing halo.  Otherwise, we make a new random halo and append it to
                the catalog.  Multiple FRB catalogs (saved in separate hdf5 datasets) can be generated for lists
                of frb_par values.  Throughout, we adopt a correlated hypothesis.
@@ -146,7 +146,7 @@ class simcat:
         for q in range(nsim):
             print(f'iter {q} of {nsim-1}')
 
-            # Current number of galaxies and FRB's in saved catalogs.
+            # Current number of galaxies and FRBs in saved catalogs.
             max_counts_g = 0
             max_counts_f = [0 for _ in range(len(self.ftc.frb_par))]
 
@@ -229,7 +229,7 @@ class simcat:
                     # 'self.config.f_sky' to get 'n_halo' values, which need to be re-normalized in order to get N_frb
                     # in the simulation box.
 
-                    # Generating the general population of FRB's.
+                    # Generating the general population of FRBs.
                     nfrb_per_halo_mass_bin = rand.poisson(
                                            max(0.0, self.ftc.eta[qq](z) * self.ftc.survey_frb.f_sky / self.config.f_sky)
                                            * (m/self.m_f) * n_halo)
@@ -264,7 +264,7 @@ class simcat:
                     #   - Need to "replace" cat_Nfrb1 sources with galaxies below.
                     #   - psg depends on Mg which is constrained by self.ftc.survey_galaxy.zmax.
 
-                    # Generating FRB's which are bound to galaxies.
+                    # Generating FRBs which are bound to galaxies.
                     if gx.size and np.sum(psg[iz][qq]):
                         nfrb1_per_halo_mass_bin_g = rand.poisson(psg[iz][qq] * ngalx_per_halo_mass_bin)
                         nfrb1_per_halo_mass_bin_f = np.minimum(nfrb1_per_halo_mass_bin_g,
@@ -511,7 +511,7 @@ class simcat:
     def _generate_intrahalo_catalog(self,  name_catalog, o_path, obj_type, z_halo=None, counts=None, center=None,
                                     r_vir=None, conc=None, max_counts=0, aux=None, h5_mode='w', frb_par=None, ext=None):
         """
-        This helper method generates random catalogs of galaxies or FRB's in a redshift shell.
+        This helper method generates random catalogs of galaxies or FRBs in a redshift shell.
 
         Args:
 
@@ -997,7 +997,7 @@ class simcat:
             nf = np.append(cat_f[:,2], nf, axis=0)
             ng = np.append(cat_g[:,2], ng, axis=0)
 
-        # FRB's.
+        # FRBs.
         plt.hist(nf, log=True, bins=bins, fc=(0,0,0,0), lw=1, ls='solid', histtype='step')
 
         dndz = self.ftc.dndz_frb[frb_par_index]
