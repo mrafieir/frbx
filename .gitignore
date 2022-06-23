@@ -1,0 +1,17 @@
+*~
+*.swp
+*.out
+temp*
+*.aux
+*.bbl
+*.blg
+*.log
+*.pyc
+*.h5
+*.gz
+.DS_Store
+data/archive
+handouts/outputs
+build/
+dist/
+frbx.egg-info/
