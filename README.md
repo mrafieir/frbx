@@ -37,3 +37,8 @@ We encourage the use of [Python Handouts](https://github.com/danijar/handout) fo
 scripting and sharing results! Some examples can be found in `./handouts/`. To run one, simply
 do `python3 <script_name.py>`. Then, open `data/archive/outputs/<script_name>/index.html` in
 your browser!
+
+### PUBLICATIONS
+
+- Rafiei-Ravandi, M. et al. (2021) [*CHIME/FRB Catalog 1 results: statistical cross-correlations with large-scale structure.*](https://ui.adsabs.harvard.edu/abs/2021ApJ...922...42R/abstract) ApJ, 922, 42.
+- Rafiei-Ravandi, M., Smith, K. M., and Masui, K. W. (2020) [*Characterizing fast radio bursts through statistical cross-correlations.*](https://ui.adsabs.harvard.edu/abs/2020PhRvD.102b3528R/abstract) PRD, 102, 023528.
