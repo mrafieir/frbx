@@ -299,7 +299,7 @@ class frb_overdensity:
         """
 
         if mockcat is None:
-            # Randomize RA's (leaving dec's unchanged).
+            # Randomize RA's (leaving DEC's unchanged).
             mockcat_ra = np.random.uniform(0.0, 360.0, size=self.size)
             mockcat_dec = self.dec_deg
         else:
