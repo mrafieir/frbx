@@ -72,7 +72,7 @@ class halo_mass_function:
             interp_nstep_m: (int) number of interpolation steps along the m axis.
             fpar: (list) if not None, model parameters for the Sheth-Tormen mass function: [A, a, delta_c, p]
 
-            (*)  requires the following args for constructing a p_k with 'ft' conventions:
+            (*)  requires the following args for constructing a p_k with 'frbx' conventions:
                     hubble_units = True -> self.p_k outputs in (Mpc/h)^3.
                     k_hunit = True      -> self.p_k = P(k), where k is assumed to be in (h/Mpc).
                     extrap_kmax = kmax, where e.g. kmax=1.0e5 here by default.
