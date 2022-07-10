@@ -111,8 +111,8 @@ class configs:
             self.zmin = 0.6
             self.zmax = 1.7
 
-        elif self.name == 'chimefrb_c1_2mpz_fp':
-            self.survey_galaxy = '2mpz_fp'
+        elif self.name == 'chimefrb_c1_2mpz_analysis':
+            self.survey_galaxy = '2mpz_analysis'
             self.survey_frb = 'chimefrb_catalog1'
             self.zmax = 0.3
             self.md = 3.733333333333333
@@ -345,7 +345,7 @@ class frb_configs:
                [1000, 2.0, 3.5, 4.0, 1.0, 1.0, False, 1.0e9],           # High-z FRBs x SDSS (incl. single-galaxy term)
                [1000, 2.0, 120.0, 6.7755, 0.6316, 0.0, True, 1.0e9],    # Low-z FRBs x SDSS (requires log-spaced z)
                [10000, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],          # High-z FRBs x DESI (10x fid N_frb)
-               [323, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRBs x 2MPZ_FP
+               [323, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRBs x 2MPZ_ANALYSIS
                [310, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9],            # CHIMEFRB Catalog 1 FRBs x WISExSCOS_SVM
                [183, 2.0, 3.5, 4.0, 1.0, 0.0, False, 1.0e9]]            # CHIMEFRB Catalog 1 FRBs x DESI-BGS/LRG/ELG
 
@@ -460,19 +460,19 @@ class galaxy_configs:
                                  'ntrap': 10,
                                  'solver': 'Nelder-Mead'},
 
-               '2mpz_fp': {'survey_name': '2mpz_fp',
-                           'instrument': '2MASS',
-                           'obj_type': 'GALAXY',
-                           'f_sky': 0.64678955078125,
-                           'n_total': 670442,
-                           'zmin': 0.0,
-                           'zmax': 0.3,
-                           'zerr': 0.015,
-                           'dndz_data': fx.data_path('dndz_2mpz_fp.txt', envar='FRBXDATA'),
-                           'zbin_fmt': 'edge',
-                           'nspl': 12,
-                           'ntrap': 10,
-                           'solver': 'Nelder-Mead'},
+               '2mpz_analysis': {'survey_name': '2mpz_analysis',
+                                 'instrument': '2MASS',
+                                 'obj_type': 'GALAXY',
+                                 'f_sky': 0.64678955078125,
+                                 'n_total': 670442,
+                                 'zmin': 0.0,
+                                 'zmax': 0.3,
+                                 'zerr': 0.015,
+                                 'dndz_data': fx.data_path('dndz_2mpz_analysis.txt', envar='FRBXDATA'),
+                                 'zbin_fmt': 'edge',
+                                 'nspl': 12,
+                                 'ntrap': 10,
+                                 'solver': 'Nelder-Mead'},
 
                'wise_scos_svm': {'survey_name': 'wise_scos_svm',
                                  'instrument': 'WISE',
