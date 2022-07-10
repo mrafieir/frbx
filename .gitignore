@@ -7,7 +7,6 @@ temp*
 *.blg
 *.log
 *.pyc
-*.h5
 *.gz
 .DS_Store
 data/archive
