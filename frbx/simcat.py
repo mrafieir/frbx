@@ -6,7 +6,6 @@ import scipy.optimize
 import astropy.units as u
 from h5py import File as FileH5
 import matplotlib.pyplot as plt
-import frbx_theory as ft
 import frbx as fx
 from frbx.configs import eps
 
