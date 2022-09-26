@@ -1304,7 +1304,7 @@ def frb_catalog_mocks(n, nmc, path, jackknife=0):
         print(f'frb_catalog_mocks: a catalog already exists in {path}.')
 
         if (ret.shape[0] != n) or (ret.shape[-1] < nmc):
-            raise RuntimeError('frb_catalog_mocks: invalid (n,nmc) parameters!')
+            raise RuntimeError(f'frb_catalog_mocks: invalid (n,nmc)={(n,nmc)} parameters; expected {ret.shape}.')
 
         if jackknife:
             if ret.dtype != bool:

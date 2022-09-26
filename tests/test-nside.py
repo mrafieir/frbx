@@ -11,13 +11,16 @@ import frbx as fx
 
 parser = argparse.ArgumentParser(description='Testing the nside parameter.')
 
-parser.add_argument('--frb_catalog', help="Path to an FRB catalog (.json).", type=str, default='chime_frb/catalog_081920.json')
-parser.add_argument('--frb_flagged', help="Path to a .npy file specifying flagged FRBs.", type=str, default='chime_frb/ignore_081920.npy')
-parser.add_argument('--frb_mocks', help="Path to a .npy file containing FRB mocks.", type=str, default='chime_frb/mocks_c081920_i081920.npy')
+parser.add_argument('--frb_catalog', help="Path to an FRB catalog (.json).", type=str, default='chime_frb/catalog_122120.json')
+parser.add_argument('--frb_mocks', help="Path to a .npy file containing FRB mocks.", type=str, default='chime_frb/mocks_c122120_i103120_it112120.npy')
+parser.add_argument('--frb_flagged', help="Path to a .npy file specifying flagged FRBs.", type=str, default='chime_frb/ignore_103120.npy')
+parser.add_argument('--frb_flagged_tns', help="Path to a .txt file specifying flagged FRBs (TNS format).", type=str, default='chime_frb/ignore_tns_112120.txt')
+parser.add_argument('--single_burst', help="If set, then repeating events are ignored.  An alternative option is to exclude repeaters by 'frb_flagged*' args.", action='store_true')
+parser.add_argument('--morphology_in', help="FRB morphology to include, e.g. 'Simple '", default=None)
+parser.add_argument('--morphology_ex', help="FRB morphology to exclude, e.g. 'Repeater'", default=None)
 parser.add_argument('--galaxy_catalog', help="Name of a galaxy catalog.", type=str, default='wise_scos_svm')
 parser.add_argument('--zmin', help='Min redshift on galaxy side.', type=float, default=0.35)
 parser.add_argument('--zmax', help='Max redshift on galaxy side.', type=float, default=0.37)
-parser.add_argument('--disable_single_burst', help='If set, then all repeating events are ignored.', action='store_true')
 
 args = parser.parse_args()
 print(args)
@@ -33,11 +36,12 @@ doc = handout.Handout(fx.data_path(outdir, mode='w'), title='test-nside')
 cat_f_path = fx.data_path(f'archive/catalogs/{args.frb_catalog}')
 
 if cat_f_path.endswith('.json'):
-    _single_burst = not args.disable_single_burst
     _flagged = None if (args.frb_flagged == '') else fx.data_path(f'archive/catalogs/{args.frb_flagged}')
-    cat_f = fx.frb_catalog_json(fx.data_path(f'archive/catalogs/{args.frb_catalog}'), single_burst=_single_burst,
-                                morphology_in=None, morphology_ex=None, flagged=_flagged,
-                                mocks=fx.data_path(f'archive/catalogs/{args.frb_mocks}'))
+    _flagged_tns = None if (args.frb_flagged_tns == '') else fx.data_path(f'archive/catalogs/{args.frb_flagged_tns}')
+    _mocks = None if (args.frb_mocks == '') else fx.data_path(f'archive/catalogs/{args.frb_mocks}')
+    cat_f = fx.frb_catalog_json(fx.data_path(f'archive/catalogs/{args.frb_catalog}'), single_burst=args.single_burst,
+                                morphology_in=args.morphology_in, morphology_ex=args.morphology_ex, flagged=_flagged,
+                                flagged_tns=_flagged_tns, mocks=_mocks)
 else:
     raise RuntimeError('test-nside: invalid frb catalog!')
 
