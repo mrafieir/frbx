@@ -1805,8 +1805,12 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         flagged_tns = np.loadtxt(flagged_tns, dtype=str)
 
     gdm = fx.gal_dm()
-    x = np.load(id_nbeam)
-    nbeams = dict(zip(x[0,:],x[1,:]))
+
+    if id_nbeam is not None:
+        x = np.load(id_nbeam)
+        nbeams = dict(zip(x[0,:],x[1,:]))
+    else:
+        nbeams = None
 
     a = []
     nrepeaters = 0
@@ -1862,10 +1866,10 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
                 continue
 
         try:
-            ra_deg = float(d[i]['ra'])
-            dec_deg = float(d[i]['dec'])
-            ra_err_deg = float(d[i]['ra_error'])
-            dec_err_deg = float(d[i]['dec_error'])
+            ra_deg = np.mean(d[i]['ra'])
+            dec_deg = np.mean(d[i]['dec'])
+            ra_err_deg = np.max(np.abs(d[i]['ra_error']))
+            dec_err_deg = np.max(np.abs(d[i]['dec_error']))
         except KeyError:
             invalid_coordinates += 1
             continue
@@ -1925,7 +1929,7 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
             print(err)
 
         try:
-            dm_excess = float(d[i][f'dm_excess_ymw16'])
+            dm_excess = np.mean(d[i][f'dm_excess_ymw16'])
             _dm_gal = dm_obs - dm_excess
             assert np.isclose(_dm_gal, _dm_gal_pygedm, rtol=0.2, atol=1.0e-7),\
                     f'frb_catalog_json: (eid, ra, dec, _dm_gal, _dm_gal_fx)' \
@@ -1942,6 +1946,10 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
 
         try:
             scattering = d[i]['scattering_time_ms']
+
+            if isinstance(scattering, list):
+                scattering = np.mean(scattering)
+
             try:
                 scattering = float(scattering)
             except ValueError:
@@ -1955,18 +1963,24 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         except KeyError:
             invalid_pulse_width += 1
             continue
+        except ValueError:
+            pulse_width = np.nan
 
         try:
             spectral_index = list_to_arr(d[i]['spectral_index']).mean()
         except KeyError:
             invalid_spectral_index += 1
             continue
+        except ValueError:
+            spectral_index = np.nan
 
         try:
             fluence = float(d[i]['fluence'])
         except KeyError:
             invalid_fluence += 1
             continue
+        except ValueError:
+            fluence = np.nan
 
         try:
             bandwidth_high = list_to_arr(d[i]['bandwidth_high']).max()
@@ -1974,6 +1988,9 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         except KeyError:
             invalid_bandwidth += 1
             continue
+        except ValueError:
+            bandwidth_high = np.nan
+            bandwidth_low = np.nan
 
         try:
             toa = d[i]['toa']
@@ -1984,6 +2001,8 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         except KeyError:
             invalid_toa += 1
             continue
+        except ValueError:
+            toa = np.nan
 
         try:
             peak_freq = d[i]['peak_frequency']
@@ -1994,12 +2013,17 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         except KeyError:
             invalid_peak_freq += 1
             continue
+        except ValueError:
+            peak_freq = np.nan
 
-        try:
-            nbeam = nbeams[eid]
-        except KeyError:
-            invalid_nbeam += 1
-            continue
+        if nbeams is not None:
+            try:
+                nbeam = nbeams[eid]
+            except KeyError:
+                invalid_nbeam += 1
+                continue
+        else:
+            nbeam = 1
 
         a.append([eid, snr, dm_obs, ra_deg, dec_deg, dm_gal, ra_err_deg, dec_err_deg, scattering,
                   pulse_width, spectral_index, fluence, bandwidth_high, bandwidth_low, toa, peak_freq,
@@ -2036,6 +2060,15 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
                       spectral_index=a[:,10], fluence=a[:,11], bandwidth_high=a[:,12], bandwidth_low=a[:,13],
                       toa=a[:,14], peak_freq=a[:,15], aux=a[:,16:], mocks=m, jackknife=jackknife, kernelize=kernelize)
     return ret
+
+
+def frb_catalog_rn3_json():
+    return frb_catalog_json(filename=fx.data_path('archive/catalogs/chime_frb/rn3_sources_083122.json'),
+                            morphology_in=None, morphology_ex=None, single_burst=True,
+                            flagged=fx.data_path('archive/catalogs/chime_frb/ignore_103120.npy'),
+                            flagged_tns=fx.data_path('archive/catalogs/chime_frb/ignore_tns_112120.txt'),
+                            mocks=fx.data_path('archive/catalogs/chime_frb/mocks_rn3_083122_i103120_it112120.npy'),
+                            id_nbeam=None, nmc=1000000, plt_args=None, jackknife=0, kernelize=False)
 
 
 def frb_host_catalog(filename=fx.data_path('archive/catalogs/frb_hosts/fh_040221.csv')):
