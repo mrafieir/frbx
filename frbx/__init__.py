@@ -16,7 +16,7 @@ from .catalog import galaxy_catalog, galaxy_catalog_2mpz,\
     frb_catalog, frb_catalog_may7, frb_catalog_jun23, frb_catalog_jun23_non_repeaters,\
     frb_catalog_jun23_meridian, frb_catalog_baseband, frb_catalog_dynamic,\
     frb_catalog_json, galaxy_catalog_desilis_dr8, frb_catalog_csv, frb_catalog_cs,\
-    frb_catalog_published_repeaters,\
+    frb_catalog_published_repeaters, frb_catalog_rn3_json,\
     galaxy_catalog_wise_scos, galaxy_catalog_wise_scos_svm, frb_catalog_mocks
 
 from .overdensity import galaxy_overdensity, frb_overdensity

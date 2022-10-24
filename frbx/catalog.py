@@ -1598,64 +1598,6 @@ def frb_catalog_cs(filename=fx.data_path('archive/catalogs/chime_frb/cs_011822.c
     return ret
 
 
-def frb_catalog_rn3(filename=fx.data_path('archive/catalogs/chime_frb/rn3_sources_preliminary_all.npy'),
-                    mocks=fx.data_path('archive/catalogs/chime_frb/mocks_rn3_121521.npy'),
-                    plt_args=None, nmc=1000000, jackknife=0):
-    """Returns a CHIME FRB RN3 catalog."""
-
-    if plt_args is None:
-        plt_args = {}
-
-    d = fx.read_arr(filename, allow_pickle=True)
-
-    gdm = fx.gal_dm()
-    a = []
-
-    for i, event in enumerate(d):
-        eid = int(event[0])
-        snr = np.nan
-        dm_obs = float(event[3])
-        ra_deg = float(event[1])
-        dec_deg = float(event[2])
-        ra_err_deg = np.nan
-        dec_err_deg = np.nan
-        pcc = float(event[6])
-
-        baseband_loc = bool(event[5])
-
-        dm_gal = gdm(ra_deg, dec_deg)
-
-        scattering = np.nan
-        pulse_width = np.nan
-        spectral_index = np.nan
-
-        fluence = np.nan
-        bandwidth_high = np.nan
-        bandwidth_low = np.nan
-
-        toa = np.nan
-        peak_freq = np.nan
-
-        a.append([eid, snr, dm_obs, ra_deg, dec_deg, dm_gal, ra_err_deg, dec_err_deg,
-                  scattering, pulse_width, spectral_index, fluence, bandwidth_high, bandwidth_low,
-                  toa, peak_freq, baseband_loc, pcc])
-
-    a = np.asarray(a)
-    fx.utils.assert_eid_unique(a[:,0])
-
-    m = frb_catalog_mocks(n=a.shape[0], nmc=nmc, path=mocks, jackknife=jackknife) if (mocks is not None) else None
-    if (mocks is not None) and jackknife:
-        m = [a[:,3:5], m]
-
-    ret = frb_catalog(snr=a[:,1], dm_obs=a[:,2], ra_deg=a[:,3], dec_deg=a[:,4], dm_gal=a[:,5],
-                      plt_args=plt_args, ra_err_deg=a[:,6], dec_err_deg=a[:,7], eid=a[:,0],
-                      scattering=a[:,8], pulse_width=a[:,9], spectral_index=a[:,10], fluence=a[:,11],
-                      bandwidth_high=a[:,12], bandwidth_low=a[:,13], toa=a[:,14], peak_freq=a[:,15],
-                      aux=a[:,16:], mocks=m, jackknife=jackknife)
-
-    return ret
-
-
 def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chime_frb/repeaters_101122.json'),
                                     mocks=fx.data_path('archive/catalogs/chime_frb/mocks_repeaters_101122.npy'),
                                     plt_args=None, nmc=1000000, jackknife=0):
