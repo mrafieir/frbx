@@ -1598,8 +1598,8 @@ def frb_catalog_cs(filename=fx.data_path('archive/catalogs/chime_frb/cs_011822.c
     return ret
 
 
-def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chime_frb/repeaters_101122.json'),
-                                    mocks=fx.data_path('archive/catalogs/chime_frb/mocks_repeaters_101122.npy'),
+def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chime_frb/repeaters_011122.json'),
+                                    mocks=fx.data_path('archive/catalogs/chime_frb/mocks_repeaters_011122.npy'),
                                     plt_args=None, nmc=1000000, jackknife=0):
     """Returns a CHIME FRB catalog based on the most precise data on published repeaters."""
 
@@ -1623,11 +1623,17 @@ def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chim
         dm_obs = np.mean(dm_obs)
 
         ra = d[i]['ra']['value'].split(':')
-        ra_deg = float(ra[0]) + (float(ra[1]) / 60.)
-        ra_deg *= 15
+        if len(ra) == 2:
+            ra_deg = float(ra[0]) + (float(ra[1]) / 60.)
+            ra_deg *= 15
+        else:
+            ra_deg = float(ra[0])
 
         dec = d[i]['dec']['value'].split(':')
-        dec_deg = float(dec[0]) + (float(dec[1]) / 60.)
+        if len(dec) == 2:
+            dec_deg = float(dec[0]) + (float(dec[1]) / 60.)
+        else:
+            dec_deg = float(dec[0])
 
         dm_gal = gdm(ra_deg, dec_deg)
 
