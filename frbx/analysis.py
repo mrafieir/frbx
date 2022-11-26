@@ -169,7 +169,7 @@ class multi_clfg_analysis:
     galaxy subcatalog and galaxy_overdensity object is destroyed in the next iteration of the loop.)
     """
 
-    def __init__(self, deltaf, nmc, mc_start=0, mc_end=-1, seed=None):
+    def __init__(self, deltaf, nmc, nmc_start=0, nmc_end=-1, seed=None):
         assert isinstance(deltaf, fx.frb_overdensity)
         assert (seed is None) or isinstance(seed, int)
 
@@ -180,13 +180,13 @@ class multi_clfg_analysis:
         self.deltaf = deltaf
 
         self.nmc = nmc
-        self.mc_start = mc_start
-        self.mc_end = mc_end
+        self.nmc_start = nmc_start
+        self.nmc_end = nmc_end
 
-        if self.mc_start == 0 and self.mc_end == -1:
+        if self.nmc_start == 0 and self.nmc_end == -1:
             self._nmc = self.nmc
         else:
-            self._nmc = self.mc_end - self.mc_start + 1
+            self._nmc = self.nmc_end - self.nmc_start + 1
 
         assert 4 <= self._nmc <= self.nmc
 
@@ -261,7 +261,7 @@ class multi_clfg_analysis:
 
         # Monte Carlo loop over mocks.
         for i in range(self._nmc):
-            j = self.mc_start + i
+            j = self.nmc_start + i
 
             if self.deltaf.mocks is None:
                 mockcat = None
