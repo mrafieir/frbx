@@ -169,9 +169,8 @@ class multi_clfg_analysis:
     galaxy subcatalog and galaxy_overdensity object is destroyed in the next iteration of the loop.)
     """
 
-    def __init__(self, deltaf, nmc, seed=None):
+    def __init__(self, deltaf, nmc, mc_start=0, mc_end=-1, seed=None):
         assert isinstance(deltaf, fx.frb_overdensity)
-        assert nmc >= 4
         assert (seed is None) or isinstance(seed, int)
 
         if isinstance(deltaf.mocks, np.ndarray):
@@ -179,7 +178,17 @@ class multi_clfg_analysis:
 
         self.lmax = deltaf.lmax
         self.deltaf = deltaf
+
         self.nmc = nmc
+        self.mc_start = mc_start
+        self.mc_end = mc_end
+
+        if self.mc_start == 0 and self.mc_end == -1:
+            self._nmc = self.nmc
+        else:
+            self._nmc = self.mc_end - self.mc_start + 1
+
+        assert 4 <= self._nmc <= self.nmc
 
         self.seed = seed
         np.random.seed(self.seed)
@@ -251,19 +260,21 @@ class multi_clfg_analysis:
         t0 = time.time()
 
         # Monte Carlo loop over mocks.
-        for i in range(self.nmc):
+        for i in range(self._nmc):
+            j = self.mc_start + i
+
             if self.deltaf.mocks is None:
                 mockcat = None
             elif isinstance(self.deltaf.mocks, np.ndarray):
-                mockcat = self.deltaf.mocks[...,i]
+                mockcat = self.deltaf.mocks[...,j]
             else:
-                m = self.deltaf.mocks[1][:,i]
+                m = self.deltaf.mocks[1][:,j]
                 mockcat = self.deltaf.mocks[0][m,:]
 
             deltaf_alm = self.deltaf.get_mock_alm(mockcat)
 
-            self.clfg_mocks[i,:,:] = self._compute_clfg(deltaf_alm)
-            print(f'multi_clfg_analysis: mock {i+1}/{self.nmc} [{time.time()-t0} sec]')
+            self.clfg_mocks[j,:,:] = self._compute_clfg(deltaf_alm)
+            print(f'multi_clfg_analysis: mock {j+1}/{self.nmc} [{time.time()-t0} sec]')
 
         self.finalized = True
 
