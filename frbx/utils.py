@@ -1237,7 +1237,7 @@ class l_binning:
         assert arr.shape == (self.lmax+1,)
 
         d = self.l_delim
-        return np.array([ np.mean(arr[d[i]:d[i+1]]) for i in range(self.nbins) ])
+        return np.array([ np.mean(arr[d[i]:d[i+1] ]) for i in range(self.nbins) ])
 
 
 def simple_l_binning(lmax, dlog=0.3):
