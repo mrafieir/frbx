@@ -1598,8 +1598,8 @@ def frb_catalog_cs(filename=fx.data_path('archive/catalogs/chime_frb/cs_011822.c
     return ret
 
 
-def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chime_frb/repeaters_011122.json'),
-                                    mocks=fx.data_path('archive/catalogs/chime_frb/mocks_repeaters_011122.npy'),
+def frb_catalog_published_repeaters(filename=fx.data_path('archive/catalogs/chime_frb/repeaters_120622.json'),
+                                    mocks=fx.data_path('archive/catalogs/chime_frb/mocks_repeaters_120622.npy'),
                                     plt_args=None, nmc=1000000, jackknife=0):
     """Returns a CHIME FRB catalog based on the most precise data on published repeaters."""
 
