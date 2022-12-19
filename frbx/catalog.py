@@ -2010,12 +2010,12 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
     return ret
 
 
-def frb_catalog_rn3_json():
+def frb_catalog_rn3_json(it_date=112120):
     return frb_catalog_json(filename=fx.data_path('archive/catalogs/chime_frb/rn3_sources_083122.json'),
                             morphology_in=None, morphology_ex=None, single_burst=True,
                             flagged=fx.data_path('archive/catalogs/chime_frb/ignore_103120.npy'),
-                            flagged_tns=fx.data_path('archive/catalogs/chime_frb/ignore_tns_112120.txt'),
-                            mocks=fx.data_path('archive/catalogs/chime_frb/mocks_rn3_083122_i103120_it112120.npy'),
+                            flagged_tns=fx.data_path(f'archive/catalogs/chime_frb/ignore_tns_{it_date}.txt'),
+                            mocks=fx.data_path(f'archive/catalogs/chime_frb/mocks_rn3_083122_i103120_it{it_date}.npy'),
                             id_nbeam=None, nmc=1000000, plt_args=None, jackknife=0, kernelize=False)
 
 
