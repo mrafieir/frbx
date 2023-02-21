@@ -2010,7 +2010,7 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
     return ret
 
 
-def frb_catalog_rn3_json(it_date=112120, i_date=103120):
+def frb_catalog_rn3_json(it_date='112120', i_date='103120'):
     return frb_catalog_json(filename=fx.data_path('archive/catalogs/chime_frb/rn3_sources_083122.json'),
                             morphology_in=None, morphology_ex=None, single_burst=True,
                             flagged=fx.data_path(f'archive/catalogs/chime_frb/ignore_{i_date}.npy'),
