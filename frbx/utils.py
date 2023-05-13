@@ -990,12 +990,13 @@ def make_catalog_mask_from_healpix_mask(nside, l_deg, b_deg, mask):
     return ret.astype(bool)
 
 
-def make_healpix_map_from_catalog(nside, l_deg, b_deg, weight=1.0, interpolate=False):
+def make_healpix_map_from_catalog(nside, l_deg, b_deg, weight=1.0, interpolate=False, invar=1.0):
     """
     The (l_deg, b_deg) args should be 1-d arrays of the same length N,
     representing a catalog in galactic coordinates (l,b).  If the 'interpolate'
     arg is True, then a CIC-like weighting scheme is assumed, enabling a bilinear
-    interpolation.
+    interpolation. If 'weight' and 'invar' are arrays, then overlapping inputs are
+    weighted-averaged through sum(invar * weight) / sum(invar).
 
     Returns healpix map containing (weight) * (number of objects in each pixel).
 
@@ -1014,8 +1015,24 @@ def make_healpix_map_from_catalog(nside, l_deg, b_deg, weight=1.0, interpolate=F
         if not isinstance(pix_arr, np.ndarray):
             pix_arr = np.array([pix_arr])
 
-        for pix in pix_arr:
-            ret[pix] += weight
+        if not isinstance(weight, np.ndarray):
+            for pix in pix_arr:
+                ret[pix] += weight
+        else:
+            assert weight.size == pix_arr.size
+            try:
+                assert invar.size == pix_arr.size
+            except AttributeError:
+                assert isinstance(invar, float)
+                invar = np.full_like(weight, invar)
+
+            ret_invar = np.zeros(npix)
+            for i, pix in enumerate(pix_arr):
+                ret[pix] += (invar[i] * weight[i])
+                ret_invar[pix] += invar[i]
+
+            mask = ret_invar != 0
+            ret[mask] /= ret_invar[mask]
     else:
         pix_arr, w = healpy.pixelfunc.get_interp_weights(nside, l_deg, b_deg, lonlat=True)
 

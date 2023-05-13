@@ -1,4 +1,5 @@
 import numpy as np
+import healpy
 import scipy.interpolate
 import frbx as fx
 
@@ -91,19 +92,27 @@ class cl_models:
 
 
 class gal_dm:
-    """
-    Computes the max galactic DMs for arrays of equatorial coordinates.
-    TODO: Spherical interpolation; the current version interpolates values over a flat grid which is not quite accurate.
-    """
+    """Computes the max galactic DMs for arrays of equatorial coordinates."""
 
-    def __init__(self):
+    def __init__(self, nside=4):
+        self.nside = nside
+
         # (n, (ra, dec, dm, dm_err))
         ymw16 = np.load(fx.data_path('archive/maps/YMW16_map.npy'))
+        # (n, (ra, dec, dm))
         ne01 = np.load(fx.data_path('archive/maps/NE2001_map.npy'))
 
         # (ra, dec)
         self.ymw16 = scipy.interpolate.LinearNDInterpolator(ymw16[:,:2], ymw16[:,2], fill_value=-99)
         self.ne01 = scipy.interpolate.LinearNDInterpolator(ne01[:,:2], ne01[:,2], fill_value=-99)
+
+        l_deg, b_deg = fx.utils.convert_ra_dec_to_l_b(ymw16[:,0], ymw16[:,1])
+        self.ymw16_hp = fx.utils.make_healpix_map_from_catalog(
+                      self.nside, l_deg, b_deg, weight=ymw16[:,2], interpolate=False, invar=1.0/ymw16[:,3]**2)
+
+        l_deg, b_deg = fx.utils.convert_ra_dec_to_l_b(ne01[:,0], ne01[:,1])
+        self.ne01_hp = fx.utils.make_healpix_map_from_catalog(
+                     self.nside, l_deg, b_deg, weight=ne01[:,2], interpolate=False, invar=1.0)
 
     def __call__(self, ra, dec, mode='ymw16'):
         ra, dec = np.asarray(ra), np.asarray(dec)
@@ -120,8 +129,20 @@ class gal_dm:
 
         if mode == 'ymw16':
             return d1 if (d1.size > 1) else float(d1)
+
         elif mode == 'ne01':
             return d2 if (d2.size > 1) else float(d2)
+
+        elif mode == 'ymw16_hp':
+            l, b = fx.utils.convert_ra_dec_to_l_b(ra, dec)
+            d1_hp = healpy.pixelfunc.get_interp_val(self.ymw16_hp, l, b, lonlat=True)
+            return d1_hp if (d1_hp.size > 1) else float(d1_hp)
+
+        elif mode == 'ne01_hp':
+            l, b = fx.utils.convert_ra_dec_to_l_b(ra, dec)
+            d2_hp = healpy.pixelfunc.get_interp_val(self.ne01_hp, l, b, lonlat=True)
+            return d2_hp if (d2_hp.size > 1) else float(d2_hp)
+
         elif 'pygedm' in mode:
             dist = 5.5e4        # pc
             method = mode.split('_')[1]

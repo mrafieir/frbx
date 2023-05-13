@@ -19,5 +19,4 @@ setup(name='frbx',
                         'requests',
                         'chime_frb_api',
                         'pymangle',
-                        'pygedm',
                         'pytz'])
