@@ -41,6 +41,11 @@ print('cl_models -> passed.')
 # gal_dm: (class) computes the galactic DMs for arrays of equatorial coordinates.
 
 pygedm = False
+ref_axis = 2    # linear, healpix, pygedm
+
+if not pygedm and (ref_axis==2):
+    raise RuntimeError('test_model: if pygedm=False, then axis!=2 is expected!')
+
 nsides = [4, 8, 16]
 n_ra = 10
 n_dec = 10
@@ -48,10 +53,10 @@ n_dec = 10
 ret = np.zeros((2, 3, len(nsides), n_ra, n_dec))
 
 for i, nside in enumerate(nsides):
-    gal_dm = fx.model_gal_dm(nside=nside)
+    gal_dm = fx.model.gal_dm(nside=nside)
 
-    for j, ra in enumerate(range(0.0, 360.0, n_ra)):
-        for k, dec in enumerate(range(-90.0, 90.0, n_dec)):
+    for j, ra in enumerate(np.linspace(0, 360, n_ra)):
+        for k, dec in enumerate(np.linspace(-90, 90, n_dec)):
             ret[0,0,i,j,k] = gal_dm(ra, dec, 'ymw16')
             ret[0,1,i,j,k] = gal_dm(ra, dec, 'ymw16_hp')
 
@@ -62,7 +67,10 @@ for i, nside in enumerate(nsides):
                 ret[0,2,i,j,k] = gal_dm(ra, dec, 'pygedm_ymw16')
                 ret[1,2,i,j,k] = gal_dm(ra, dec, 'pygedm_ne01')
 
+ret -= ret[:,2,:,:,:][:,np.newaxis,:,:,:]
+ret = np.abs(ret)
 #FIXME
+
 print('gal_dm -> passed.')
 
 
