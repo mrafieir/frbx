@@ -45,7 +45,7 @@ nsides = [4, 8, 16]
 n_ra = 10
 n_dec = 10
 
-ret = np.zeros(2, 3, (len(nsides), n_ra, n_dec))
+ret = np.zeros((2, 3, len(nsides), n_ra, n_dec))
 
 for i, nside in enumerate(nsides):
     gal_dm = fx.model_gal_dm(nside=nside)
