@@ -1867,19 +1867,19 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
             continue
 
         _dm_gal_fx = gdm(ra_deg, dec_deg, mode='ymw16')
-        _dm_gal_pygedm = gdm(ra_deg, dec_deg, mode=f'pygedm_ymw16')
+        _dm_gal_hp = gdm(ra_deg, dec_deg, mode=f'ymw16_hp')
 
         try:
-            assert np.isclose(_dm_gal_fx, _dm_gal_pygedm, rtol=0.2, atol=1.0e-7),\
-                f'frb_catalog_json: (eid, ra, dec, _dm_gal_fx, _dm_gal_pygedm)' \
-                f'=({eid}, {ra_deg}, {dec_deg}, {_dm_gal_fx}, {_dm_gal_pygedm})'
+            assert np.isclose(_dm_gal_fx, _dm_gal_hp, rtol=0.2, atol=1.0e-7),\
+                f'frb_catalog_json: (eid, ra, dec, _dm_gal_fx, _dm_gal_hp)' \
+                f'=({eid}, {ra_deg}, {dec_deg}, {_dm_gal_fx}, {_dm_gal_hp})'
         except AssertionError as err:
             print(err)
 
         try:
             dm_excess = np.mean(d[i][f'dm_excess_ymw16'])
             _dm_gal = dm_obs - dm_excess
-            assert np.isclose(_dm_gal, _dm_gal_pygedm, rtol=0.2, atol=1.0e-7),\
+            assert np.isclose(_dm_gal, _dm_gal_hp, rtol=0.2, atol=1.0e-7),\
                     f'frb_catalog_json: (eid, ra, dec, _dm_gal, _dm_gal_fx)' \
                     f'=({eid}, {ra_deg}, {dec_deg}, {_dm_gal}, {_dm_gal_fx})'
         except (KeyError, AssertionError) as err:
@@ -1888,9 +1888,9 @@ def frb_catalog_json(filename, morphology_in=None, morphology_ex=None, single_bu
         # Catalog-based _dm_gal is based on the initial header-based localization and may not correspond
         # to the actual galactic contribution at a post-processed sky location.  So here we overwrite
         # the param by its value at the post-processed location.
-        dm_gal = _dm_gal_pygedm
-        dm_gal_ne01 = gdm(ra_deg, dec_deg, mode='pygedm_ne2001')
-        dm_halo_yt20 = gdm(ra_deg, dec_deg, mode='pygedm_yt2020')
+        dm_gal = _dm_gal_hp
+        dm_gal_ne01 = gdm(ra_deg, dec_deg, mode='ne01_hp')
+        dm_halo_yt20 = -99
 
         try:
             scattering = d[i]['scattering_time_ms']
@@ -2037,8 +2037,8 @@ def frb_host_catalog(filename=fx.data_path('archive/catalogs/frb_hosts/fh_040221
             dm = float(r[3])
             z = float(r[4])
 
-            dm_ymw16 = gdm(ra_deg, dec_deg, mode=f'pygedm_ymw16')
-            dm_ne01 = gdm(ra_deg, dec_deg, mode=f'pygedm_ne2001')
+            dm_ymw16 = gdm(ra_deg, dec_deg, mode=f'ymw16_hp')
+            dm_ne01 = gdm(ra_deg, dec_deg, mode=f'ne01_hp')
 
             cat.append([name, ra_deg, dec_deg, dm, dm_ymw16, dm_ne01, z])
 
@@ -2081,8 +2081,8 @@ def frb_catalog_rn12(filename=fx.data_path('archive/catalogs/chime_frb/rn12_sour
             dec_deg = float(r[6])
             dec_err_deg = float(r[7])
 
-            dm_ymw16 = gdm(ra_deg, dec_deg, mode=f'pygedm_ymw16')
-            dm_ne01 = gdm(ra_deg, dec_deg, mode=f'pygedm_ne2001')
+            dm_ymw16 = gdm(ra_deg, dec_deg, mode=f'ymw16_hp')
+            dm_ne01 = gdm(ra_deg, dec_deg, mode=f'ne01_hp')
 
             dm = float(_event['dm'])
             snr = np.nan
