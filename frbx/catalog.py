@@ -1381,6 +1381,22 @@ def frb_catalog_jun23_meridian(filename=fx.data_path('archive/catalogs/chime_frb
     return frb_catalog(snr=a[:,0], dm_obs=a[:,1], ra_deg=a[:,2], dec_deg=a[:,3], dm_gal=a[:,4])
 
 
+def frb_catalog_basecat1(filename=fx.data_path('archive/data/bbcat1-2023-6-15.json')):
+    """Returns the basecat1 catalog.  Made by Kaitlyn."""
+
+    import json
+    with open(filename) as ffile:
+        cat = json.load(ffile)
+
+    snr = np.array([cat[x]['bonsai_snr'] for x in range(len(cat))])
+    dm_obs = np.array([cat[x]['bonsai_dm'] for x in range(len(cat))])
+    ra_deg = np.array([cat[x]['ra'] for x in range(len(cat))])
+    dec_deg = np.array([cat[x]['dec'] for x in range(len(cat))])
+    dm_gal = np.array([cat[x]['bonsai_dm']-cat[x]['dm_excess_ymw16'] for x in range(len(cat))])
+
+    return frb_catalog(snr=snr, dm_obs=dm_obs, ra_deg=ra_deg, dec_deg=dec_deg, dm_gal=dm_gal)
+
+
 def frb_catalog_baseband():
     """Returns updated catalog of CHIME FRB baseband events.  Originally written by Chitrang Patel."""
 
