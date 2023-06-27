@@ -106,9 +106,17 @@ class gal_dm:
         self.ymw16 = scipy.interpolate.LinearNDInterpolator(ymw16[:,:2], ymw16[:,2], fill_value=-99)
         self.ne01 = scipy.interpolate.LinearNDInterpolator(ne01[:,:2], ne01[:,2], fill_value=-99)
 
+        self.ymw16_var = scipy.interpolate.LinearNDInterpolator(ymw16[:,:2], ymw16[:,3], fill_value=-99)
+
         l_deg, b_deg = fx.utils.convert_ra_dec_to_l_b(ymw16[:,0], ymw16[:,1])
+
+        var = ymw16[:,3]
+        invar = np.ones_like(var)
+        unmask = var > 0
+        invar[unmask] = 1.0/var[unmask]**2
+
         self.ymw16_hp = fx.utils.make_healpix_map_from_catalog(
-                      self.nside, l_deg, b_deg, weight=ymw16[:,2], interpolate=False, invar=1.0/ymw16[:,3]**2)
+                      self.nside, l_deg, b_deg, weight=ymw16[:,2], interpolate=False, invar=invar)
 
         l_deg, b_deg = fx.utils.convert_ra_dec_to_l_b(ne01[:,0], ne01[:,1])
         self.ne01_hp = fx.utils.make_healpix_map_from_catalog(

@@ -1031,7 +1031,7 @@ def make_healpix_map_from_catalog(nside, l_deg, b_deg, weight=1.0, interpolate=F
                 ret[pix] += (invar[i] * weight[i])
                 ret_invar[pix] += invar[i]
 
-            mask = ret_invar != 0
+            mask = np.logical_and(np.isfinite(ret_invar), ret_invar != 0)
             ret[mask] /= ret_invar[mask]
     else:
         pix_arr, w = healpy.pixelfunc.get_interp_weights(nside, l_deg, b_deg, lonlat=True)
