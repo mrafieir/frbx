@@ -94,7 +94,7 @@ class cl_models:
 class gal_dm:
     """Computes the max galactic DMs for arrays of equatorial coordinates."""
 
-    def __init__(self, nside=4):
+    def __init__(self, nside=8):
         self.nside = nside
 
         # (n, (ra, dec, dm, dm_err))
