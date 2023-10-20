@@ -52,7 +52,7 @@ class simcat:
         self._simcat__test_*.
     """
 
-    def __init__(self, ftc, pkl_dir, debug=False):
+    def __init__(self, ftc, pkl_dir, debug=False, make_hmb_obj=True):
         """
         Constructor args:
 
@@ -64,6 +64,7 @@ class simcat:
         assert isinstance(ftc, fx.cosmology)
         assert isinstance(pkl_dir, str) and pkl_dir.endswith('/')
         assert isinstance(debug, bool)
+        assert isinstance(make_hmb_obj, bool)
 
         self.ftc = ftc
         self.pkl_dir = pkl_dir
@@ -81,15 +82,18 @@ class simcat:
         self.zmax = self.config.fn_zmax
         self.zz = fx.slicer(self.zmin, self.zmax, self.config.sim.nz, log_spaced=True)
 
-        _path = self.pkl_dir + 'hmb.pkl'
-        try:
-            hmb = fx.read_pickle(_path)
-        except OSError as err:
-            print(err)
-            hmb = self.__halo_mass_bins()
-            fx.write_pickle(_path, hmb)
+        if make_hmb_obj:
+            _path = self.pkl_dir + 'hmb.pkl'
+            try:
+                hmb = fx.read_pickle(_path)
+            except OSError as err:
+                print(err)
+                hmb = self.__halo_mass_bins()
+                fx.write_pickle(_path, hmb)
 
-        self.hmb = hmb
+            self.hmb = hmb
+        else:
+            self.hmb = None
 
     @staticmethod
     def set_rng(seed=None):
@@ -135,6 +139,7 @@ class simcat:
 
         assert isinstance(o_path, str) and o_path.endswith('.h5')
         assert isinstance(nsim, int) and (nsim % 2 == 0) and (nsim > 0)
+        assert self.hmb is not None
 
         simcat.set_rng(seed)
 
