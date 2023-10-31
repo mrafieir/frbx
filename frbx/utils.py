@@ -689,7 +689,9 @@ def read_arr(file_path, **kwargs):
     """Reads a numpy array from a file."""
 
     assert file_path[-4:] == '.npy'
-    return np.load(file_path, **kwargs)
+    ret = np.load(file_path, **kwargs)
+    print(f'read {file_path}')
+    return ret
 
 
 def write_arr(file_path, arr):
@@ -697,6 +699,7 @@ def write_arr(file_path, arr):
 
     assert file_path[-4:] == '.npy'
     np.save(file_path, arr)
+    print(f'wrote {file_path}')
 
 
 def logspace(xmin, xmax, n=None, dlog=None):
