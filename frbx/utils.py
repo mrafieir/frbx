@@ -280,7 +280,7 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
             vector_graphic=False, cmap='RdYlBu', alpha=1.0, extra_layer=None, hspace=0.12, wspace=0.12,
             legend_loc=None, dpi=450, figsize=(7,5.25), tick_width=0.75, share_cbar=True, cell_rot=0,
             share_xlabel=True, share_ylabel=True, font_size=10.0, label_size=10.0, dec=3, extend='both',
-            norm=None, log_scale_cbar=True, cbar_format=True, cell_texts=None, cbar_size='5%', **kwargs):
+            norm=None, log_scale_cbar=True, cbar_format=True, cell_texts=None, cbar_size='5%', image=False, **kwargs):
     """
     Plots a list of 2-d arrays in a master figure.
 
@@ -324,6 +324,7 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
         cell_texts: (array) if not None, specifies an array of values for annotating 2-d cells.
         cell_rot: (float) angle (ccw, deg) of rotation for 'cell_texts'.
         cbar_size: (str) size of the colorbar in percent.
+        image: (bool) whether to assume a color image.
         **kwargs: optional matplotlib.pyplot parameters for customizing all subplots in plt.pcolor(**kwargs).
         (*) per subplot.
     """
@@ -381,10 +382,14 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
         if fig_args['log_scale']:
             sp['arr'] = np.log10(sp['arr'])
 
-        _subplot = ax.flat[spi].pcolor(
-                 sp['arr'], cmap=fig_args['cmap'], snap=True, rasterized=True,
-                 alpha=fig_args['alpha'], norm=fig_args['norm'], **kw)
-
+        if not image:
+            _subplot = ax.flat[spi].pcolor(
+                     sp['arr'], cmap=fig_args['cmap'], snap=True, rasterized=True,
+                     alpha=fig_args['alpha'], norm=fig_args['norm'], **kw)
+        else:
+            _subplot = ax.flat[spi].imshow(
+                     sp['arr'], origin="upper")
+        
         if cell_texts is not None:
             _subplot.update_scalarmappable()
             _ax = _subplot.axes
@@ -402,16 +407,17 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
 
         if fig_args['extra_layer'] is not None:
             for i, j in enumerate(fig_args['extra_layer']):
-                for k in ('x', 'y', 'line_label', 'style'):
+                for k in ('x', 'y', 'line_label', 'style', 'color', 'linestyle', 'linewidth'):
                     assert k in j, 'xlayer[%d] : %s is missing!' % (i, k)
 
                 fx.plot_1d(x=j['x'], y=j['y'], line_label=j['line_label'], style=j['style'], layer=1,
+                           color=j['color'], linestyle=j['linestyle'], line_width=j['linewidth'],
                            fig=fig, ax=ax.flat[spi])
 
             if fig_args['legend_loc'] is not None:
                 plt.legend(loc=fig_args['legend_loc'], frameon=False)
 
-        (dy, dx) = sp['arr'].shape
+        (dy, dx) = sp['arr'].shape if not image else sp['arr'].size
 
         nxticks = len(fig_args['xticks']) if (fig_args['xticks'] is not None) else fig_args['nxticks']
         nyticks = len(fig_args['yticks']) if (fig_args['yticks'] is not None) else fig_args['nyticks']
@@ -472,7 +478,7 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
             else:
                 return r'$%.3f$' % x
 
-        if not share_cbar:
+        if not share_cbar and not image:
             _g = make_axes_locatable(ax.flat[spi])
             _g_cax = _g.append_axes('top', size=cbar_size, pad=0.0)
             cbar = fig.colorbar(
@@ -487,7 +493,7 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
 
     plt.tight_layout()
 
-    if share_cbar:
+    if share_cbar and not image:
         _g = make_axes_locatable(ax[0])
         _g_cax = _g.append_axes('right', size=cbar_size, pad=0.1)
         cbar = fig.colorbar(_subplot, cax=_g_cax, orientation='vertical', extend=fig_args['extend'],
