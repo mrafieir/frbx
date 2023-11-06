@@ -280,7 +280,8 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
             vector_graphic=False, cmap='RdYlBu', alpha=1.0, extra_layer=None, hspace=0.12, wspace=0.12,
             legend_loc=None, dpi=450, figsize=(7,5.25), tick_width=0.75, share_cbar=True, cell_rot=0,
             share_xlabel=True, share_ylabel=True, font_size=10.0, label_size=10.0, dec=3, extend='both',
-            norm=None, log_scale_cbar=True, cbar_format=True, cell_texts=None, cbar_size='5%', image=False, **kwargs):
+            norm=None, log_scale_cbar=True, cbar_format=True, cell_texts=None, cbar_size='5%', image=False,
+            contours=False, **kwargs):
     """
     Plots a list of 2-d arrays in a master figure.
 
@@ -325,6 +326,7 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
         cell_rot: (float) angle (ccw, deg) of rotation for 'cell_texts'.
         cbar_size: (str) size of the colorbar in percent.
         image: (bool) whether to assume a color image.
+        contours: (bool) whether to draw contours.
         **kwargs: optional matplotlib.pyplot parameters for customizing all subplots in plt.pcolor(**kwargs).
         (*) per subplot.
     """
@@ -376,7 +378,8 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
         kw = {}
         for k, v in sp.items():
             if ((k not in frame_args) and
-                    (k not in ('arr', 'cmap', 'alpha', 'text', 'text_xpos', 'text_ypos', 'text_font_size', 'cell_texts'))):
+                    (k not in ('arr', 'cmap', 'alpha', 'text', 'text_xpos', 'text_ypos', 'text_font_size', 'cell_texts',
+                               'contours_arr', 'contour_levels', 'contour_cmap', 'contour_colors', 'contour_norm'))):
                 kw.update({k: v})
 
         if fig_args['log_scale']:
@@ -390,6 +393,13 @@ def plot_2d(subplots, shape=(1,1), xticks=None, yticks=None, nxticks=5, nyticks=
             _subplot = ax.flat[spi].imshow(
                      sp['arr'], origin="upper")
         
+        if contours:
+            _contours = ax.flat[spi].contour(sp['contours_arr'], sp['contour_levels'], cmap=sp['contour_cmap'],
+                                            colors=sp['contour_colors'], norm=sp['contour_norm'],
+                                            linewidths=0.75)
+
+            ax.flat[spi].clabel(_contours, inline=True, fontsize=font_size-1.4)
+
         if cell_texts is not None:
             _subplot.update_scalarmappable()
             _ax = _subplot.axes
