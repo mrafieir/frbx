@@ -28,7 +28,7 @@ Tools for simulating, forecasting and analyzing statistical cross-correlations b
 - Define an environment variable `FRBXDATA` pointing to `data`
 - `ln -s ARCHIVE_DIR data/archive`, where `ARCHIVE_DIR` can e.g. be `/data/<user_name>`
 - `mkdir ARCHIVE_DIR/pkls ARCHIVE_DIR/catalogs ARCHIVE_DIR/maps ARCHIVE_DIR/outputs ARCHIVE_DIR/plots ARCHIVE_DIR/logs`
-- `python3 setup.py install --user` (You may also need a `--prefix=` at the end!)
+- `pip install --user ./` 
 - Follow the [instructions](https://github.com/CHIMEFRB/frb-master/wiki/CHIME-FRB-Authentication#quickstart)
 for authenticating access to CHIME/FRB master
 
