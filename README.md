@@ -41,6 +41,6 @@ your browser!
 
 ### PUBLICATIONS
 
-- Rafiei-Ravandi, M. et al. (2023) [*Statistical association between the candidate repeating FRB 20200320A and a galaxy group.*](https://ui.adsabs.harvard.edu/abs/2023arXiv230809608R/abstract) arXiv:2308.09608.
+- Rafiei-Ravandi, M. et al. (2024) [*Statistical association between the candidate repeating FRB 20200320A and a galaxy group.*](https://ui.adsabs.harvard.edu/abs/2023arXiv230809608R/abstract) ApJ, 961, 177.
 - Rafiei-Ravandi, M. et al. (2021) [*CHIME/FRB Catalog 1 results: statistical cross-correlations with large-scale structure.*](https://ui.adsabs.harvard.edu/abs/2021ApJ...922...42R/abstract) ApJ, 922, 42.
 - Rafiei-Ravandi, M., Smith, K. M., and Masui, K. W. (2020) [*Characterizing fast radio bursts through statistical cross-correlations.*](https://ui.adsabs.harvard.edu/abs/2020PhRvD.102b3528R/abstract) PRD, 102, 023528.
