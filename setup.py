@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(name = 'frbx',
       version = '1.1.0',
-      description = 'Tools for simulating, forecasting and analyzing statistical cross-correlations between fast radio bursts and other cosmological sources.'
+      description = 'Tools for simulating, forecasting and analyzing statistical cross-correlations between fast radio bursts and other cosmological sources.',
       url = 'https://github.com/mrafieir/frbx',
       author = 'Masoud Rafiei-Ravandi',
       author_email = 'mrafiei.ravandi@gmail.com',
