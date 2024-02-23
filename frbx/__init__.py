@@ -1,3 +1,5 @@
+"""Tools for simulating, forecasting and analyzing statistical cross-correlations between fast radio bursts and other cosmological sources."""
+
 # These functions are imported to the top level of the frbx package.
 from .utils import showfig, write_pickle, read_pickle, logspace, slicer,\
     simple_l_binning, data_path, get_2mass_mask, get_desilis_dr8_mask,\
